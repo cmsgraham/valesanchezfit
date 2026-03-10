@@ -1,0 +1,282 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scoped CSS reset (preflight) for public pages only - prevents conflicts with Payload admin */
+[data-theme="public"] {
+  /* Box sizing */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: currentColor;
+  }
+  
+  /* Root */
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+[data-theme="public"] body {
+  margin: 0;
+  line-height: inherit;
+}
+
+[data-theme="public"] h1, [data-theme="public"] h2, [data-theme="public"] h3, 
+[data-theme="public"] h4, [data-theme="public"] h5, [data-theme="public"] h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+[data-theme="public"] a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+[data-theme="public"] button, [data-theme="public"] input, [data-theme="public"] optgroup, 
+[data-theme="public"] select, [data-theme="public"] textarea {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+[data-theme="public"] button, [data-theme="public"] [role="button"] {
+  cursor: pointer;
+}
+
+[data-theme="public"] img, [data-theme="public"] svg, [data-theme="public"] video, 
+[data-theme="public"] canvas, [data-theme="public"] audio, [data-theme="public"] iframe, 
+[data-theme="public"] embed, [data-theme="public"] object {
+  display: block;
+  vertical-align: middle;
+}
+
+[data-theme="public"] img, [data-theme="public"] video {
+  max-width: 100%;
+  height: auto;
+}
+
+[data-theme="public"] [hidden] {
+  display: none;
+}
+
+@layer base {
+  /* Light mode variables - scoped to public pages only to avoid conflicts with Payload admin */
+  [data-theme="public"] {
+    --background: 0 0% 100%;
+    --foreground: 30 10% 10%;
+
+    --card: 40 20% 98%;
+    --card-foreground: 30 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 10% 10%;
+
+    --primary: 42 55% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 35 20% 95%;
+    --secondary-foreground: 30 10% 15%;
+
+    --muted: 40 15% 95%;
+    --muted-foreground: 30 10% 40%;
+
+    --accent: 42 55% 92%;
+    --accent-foreground: 42 55% 25%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 35 15% 88%;
+    --input: 35 15% 88%;
+    --ring: 42 55% 45%;
+
+    --radius: 0.5rem;
+  }
+
+  /* Dark mode variables - scoped to public pages only to avoid conflicts with Payload admin */
+  [data-theme="public"].dark {
+    --background: 30 10% 8%;
+    --foreground: 40 20% 98%;
+
+    --card: 30 10% 12%;
+    --card-foreground: 40 20% 98%;
+
+    --popover: 30 10% 8%;
+    --popover-foreground: 40 20% 98%;
+
+    --primary: 42 55% 50%;
+    --primary-foreground: 30 10% 8%;
+
+    --secondary: 30 10% 20%;
+    --secondary-foreground: 40 20% 95%;
+
+    --muted: 30 10% 20%;
+    --muted-foreground: 40 15% 60%;
+
+    --accent: 42 40% 20%;
+    --accent-foreground: 42 55% 70%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 30 10% 25%;
+    --input: 30 10% 25%;
+    --ring: 42 55% 50%;
+  }
+}
+
+@layer base {
+  /* Only apply border styles to public pages */
+  [data-theme="public"] * {
+    @apply border-border;
+  }
+  [data-theme="public"] body {
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Explicit text colors for reliability - scoped to public pages */
+  [data-theme="public"] .text-foreground {
+    color: hsl(30 10% 10%);
+  }
+  [data-theme="public"].dark .text-foreground {
+    color: hsl(40 20% 98%);
+  }
+  [data-theme="public"] .text-muted-foreground {
+    color: hsl(30 10% 40%);
+  }
+  [data-theme="public"].dark .text-muted-foreground {
+    color: hsl(40 15% 60%);
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-gold-500 to-gold-600 bg-clip-text text-transparent;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .glass {
+    @apply bg-white/80 backdrop-blur-lg;
+  }
+
+  /* Custom prose styling with warm colors */
+  .prose-warm {
+    @apply text-warm-800;
+  }
+  .prose-warm h1,
+  .prose-warm h2,
+  .prose-warm h3,
+  .prose-warm h4,
+  .prose-warm h5,
+  .prose-warm h6 {
+    @apply text-warm-900 font-display;
+  }
+  .prose-warm h2 {
+    @apply text-2xl font-bold mt-8 mb-4;
+  }
+  .prose-warm h3 {
+    @apply text-xl font-semibold mt-6 mb-3;
+  }
+  .prose-warm p {
+    @apply text-warm-700 leading-relaxed mb-4;
+  }
+  .prose-warm ul,
+  .prose-warm ol {
+    @apply text-warm-700 mb-4 pl-6;
+  }
+  .prose-warm ul {
+    @apply list-disc;
+  }
+  .prose-warm ol {
+    @apply list-decimal;
+  }
+  .prose-warm li {
+    @apply mb-2;
+  }
+  .prose-warm strong {
+    @apply text-warm-900 font-semibold;
+  }
+  .prose-warm a {
+    @apply text-gold-600 hover:text-gold-700 underline;
+  }
+
+  /* Dark mode prose - scoped to public pages */
+  [data-theme="public"].dark .prose-warm {
+    @apply text-warm-200;
+  }
+  [data-theme="public"].dark .prose-warm h1,
+  [data-theme="public"].dark .prose-warm h2,
+  [data-theme="public"].dark .prose-warm h3,
+  [data-theme="public"].dark .prose-warm h4,
+  [data-theme="public"].dark .prose-warm h5,
+  [data-theme="public"].dark .prose-warm h6 {
+    @apply text-warm-100;
+  }
+  [data-theme="public"].dark .prose-warm p,
+  [data-theme="public"].dark .prose-warm ul,
+  [data-theme="public"].dark .prose-warm ol {
+    @apply text-warm-300;
+  }
+  [data-theme="public"].dark .prose-warm strong {
+    @apply text-warm-100;
+  }
+  [data-theme="public"].dark .prose-warm a {
+    @apply text-gold-400 hover:text-gold-300;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Focus styles - scoped to public pages */
+[data-theme="public"] :focus-visible {
+  @apply outline-2 outline-offset-2 outline-gold-500;
+}
+
+/* Selection colors - scoped to public pages */
+[data-theme="public"] ::selection {
+  @apply bg-gold-500/30 text-warm-900;
+}
