@@ -7,15 +7,22 @@ import { Menu, X, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const navItems = [
-  { label: 'Inicio', href: '/' },
-  { label: 'Sobre Mí', href: '/about' },
-  { label: 'Servicios', href: '/services' },
-  { label: 'Programas', href: '/programs' },
-  { label: 'Contacto', href: '/contact' },
+const DEFAULT_NAV_ITEMS = [
+  { label: 'Inicio', href: '/', newTab: false },
+  { label: 'Sobre Mí', href: '/about', newTab: false },
+  { label: 'Servicios', href: '/services', newTab: false },
+  { label: 'Contacto', href: '/contact', newTab: false },
 ]
 
-export function Header() {
+interface HeaderProps {
+  data?: {
+    navItems?: { label: string; link: string; newTab?: boolean | null; highlight?: boolean | null; id?: string | null }[] | null
+    ctaButton?: { enabled?: boolean | null; text?: string | null; link?: string | null; style?: string | null } | null
+  } | null
+  whatsappUrl: string
+}
+
+export function Header({ data, whatsappUrl }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -35,11 +42,15 @@ export function Header() {
     }
   }, [isMobileMenuOpen])
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '50688546547'
-  const whatsappMessage = encodeURIComponent(
-    process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Hola! Me interesa saber más sobre los servicios.'
-  )
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
+  const navItems = data?.navItems?.length
+    ? data.navItems.map(item => ({ label: item.label, href: item.link, newTab: item.newTab ?? false }))
+    : DEFAULT_NAV_ITEMS
+
+  const ctaEnabled = data?.ctaButton?.enabled ?? true
+  const ctaText = data?.ctaButton?.text ?? 'Reserva tu Espacio'
+  const ctaStyle = data?.ctaButton?.style ?? 'whatsapp'
+  const ctaHref = ctaStyle === 'whatsapp' ? whatsappUrl : (data?.ctaButton?.link ?? '/contact')
+  const ctaExternal = ctaStyle === 'whatsapp' || ctaHref.startsWith('http')
 
   return (
     <>
@@ -86,18 +97,23 @@ export function Header() {
             </div>
 
             {/* CTA Button */}
-            <div className="hidden lg:flex items-center gap-4">
-              <Button
-                asChild
-                variant="gold"
-                size="default"
-              >
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Reserva tu Espacio
-                </a>
-              </Button>
-            </div>
+            {ctaEnabled && (
+              <div className="hidden lg:flex items-center gap-4">
+                <Button asChild variant="gold" size="default">
+                  {ctaExternal ? (
+                    <a href={ctaHref} target="_blank" rel="noopener noreferrer">
+                      <Phone className="w-4 h-4 mr-2" />
+                      {ctaText}
+                    </a>
+                  ) : (
+                    <Link href={ctaHref}>
+                      <Phone className="w-4 h-4 mr-2" />
+                      {ctaText}
+                    </Link>
+                  )}
+                </Button>
+              </div>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -155,29 +171,33 @@ export function Header() {
                     </Link>
                   </motion.div>
                 ))}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="pt-6 border-t"
-                >
-                  <Button
-                    asChild
-                    variant="gold"
-                    size="lg"
-                    className="w-full"
+                {ctaEnabled && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="pt-6 border-t"
                   >
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Phone className="w-4 h-4 mr-2" />
-                      Reserva tu Espacio
-                    </a>
-                  </Button>
-                </motion.div>
+                    <Button asChild variant="gold" size="lg" className="w-full">
+                      {ctaExternal ? (
+                        <a
+                          href={ctaHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          <Phone className="w-4 h-4 mr-2" />
+                          {ctaText}
+                        </a>
+                      ) : (
+                        <Link href={ctaHref} onClick={() => setIsMobileMenuOpen(false)}>
+                          <Phone className="w-4 h-4 mr-2" />
+                          {ctaText}
+                        </Link>
+                      )}
+                    </Button>
+                  </motion.div>
+                )}
               </div>
             </motion.nav>
           </motion.div>

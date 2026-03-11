@@ -166,7 +166,7 @@
   }
   
   .section-padding {
-    @apply py-16 md:py-24 lg:py-32;
+    @apply py-14 md:py-20 lg:py-24;
   }
   
   .text-gradient {

@@ -36,33 +36,33 @@ export function ValuePropositionSection({
   return (
     <section className="section-padding bg-warm-50">
       <div className="container-custom">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 mb-6">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-warm-900 mb-4">
             {heading}
           </h2>
           {subheading && (
-            <p className="text-lg text-warm-600">
+            <p className="text-base md:text-lg text-warm-600">
               {subheading}
             </p>
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {highlights.map((highlight, index) => {
             const Icon = highlight.icon ? iconMap[highlight.icon] : Target
             return (
               <div
                 key={index}
-                className="text-center group"
+                className="text-center group px-2"
               >
-                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gold-500/10 flex items-center justify-center group-hover:bg-gold-500 transition-colors duration-300">
-                  <Icon className="w-8 h-8 text-gold-500 group-hover:text-white transition-colors duration-300" />
+                <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-gold-500/10 flex items-center justify-center group-hover:bg-gold-500 transition-colors duration-300">
+                  <Icon className="w-7 h-7 text-gold-500 group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="font-display text-xl font-semibold text-warm-900 mb-3">
+                <h3 className="font-display text-lg font-semibold text-warm-900 mb-2">
                   {highlight.title}
                 </h3>
                 {highlight.description && (
-                  <p className="text-warm-600 text-sm leading-relaxed">
+                  <p className="text-warm-600 text-base leading-relaxed">
                     {highlight.description}
                   </p>
                 )}

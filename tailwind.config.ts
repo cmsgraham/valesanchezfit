@@ -115,6 +115,9 @@ const config: Config = {
       },
     },
   },
+    corePlugins: {
+    preflight: false, // Disabled – public-page reset is scoped in globals.css to avoid bleeding into Payload admin
+  },
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),

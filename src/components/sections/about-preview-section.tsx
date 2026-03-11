@@ -65,11 +65,11 @@ export function AboutPreviewSection({
             <span className="inline-block px-4 py-1.5 bg-gold-500/10 text-gold-600 rounded-full text-sm font-medium mb-4">
               Sobre Mí
             </span>
-            <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 mb-6">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-warm-900 mb-5">
               {heading}
             </h2>
             <div className="prose prose-warm max-w-none mb-8">
-              <p className="text-warm-600 text-lg leading-relaxed">
+              <p className="text-warm-600 text-base md:text-lg leading-relaxed">
                 {content}
               </p>
             </div>

@@ -5,15 +5,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-export function WhatsAppButton() {
+interface WhatsAppButtonProps {
+  whatsappUrl: string
+}
+
+export function WhatsAppButton({ whatsappUrl }: WhatsAppButtonProps) {
   const [isVisible, setIsVisible] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
-
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '50688546547'
-  const whatsappMessage = encodeURIComponent(
-    process.env.NEXT_PUBLIC_WHATSAPP_MESSAGE || 'Hola! Me interesa saber más sobre los servicios de entrenamiento personal.'
-  )
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
   useEffect(() => {
     const timer = setTimeout(() => {

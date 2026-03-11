@@ -45,15 +45,15 @@ export function TestimonialsSection({
   return (
     <section className="section-padding bg-white" id="testimonials">
       <div className="container-custom">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="inline-block px-4 py-1.5 bg-gold-500/10 text-gold-600 rounded-full text-sm font-medium mb-4">
             Testimonios
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 mb-6">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-warm-900 mb-4">
             {heading}
           </h2>
           {subheading && (
-            <p className="text-lg text-warm-600">
+            <p className="text-base md:text-lg text-warm-600">
               {subheading}
             </p>
           )}

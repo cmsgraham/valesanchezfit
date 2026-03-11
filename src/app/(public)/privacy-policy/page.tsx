@@ -1,11 +1,21 @@
 import { Metadata } from 'next'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+import type { ContactSetting } from '@/payload-types'
+
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Política de Privacidad',
   description: 'Conoce cómo recopilamos, usamos y protegemos tu información personal.',
 }
 
-export default function PrivacyPolicyPage() {
+export default async function PrivacyPolicyPage() {
+  const payload = await getPayload({ config: configPromise })
+  const settings = await payload.findGlobal({ slug: 'contact-settings' }).catch(() => null) as ContactSetting | null
+  const email = settings?.email?.contactEmail ?? 'info@valesanchez.fit'
+  const whatsapp = settings?.whatsapp?.phoneNumber ? `+${settings.whatsapp.phoneNumber}` : '+506 8854 6547'
+
   return (
     <>
       <section className="relative pt-32 pb-10 bg-warm-50">
@@ -97,8 +107,8 @@ export default function PrivacyPolicyPage() {
               Si tienes preguntas sobre esta política de privacidad, puedes contactarme:
             </p>
             <ul>
-              <li>Email: cristian.madrigal@gmail.com</li>
-              <li>WhatsApp: +506 8854 6547</li>
+              <li>Email: {email}</li>
+              <li>WhatsApp: {whatsapp}</li>
             </ul>
           </div>
         </div>

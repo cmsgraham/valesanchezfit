@@ -103,6 +103,7 @@ export interface Config {
     footer: Footer;
     'home-page': HomePage;
     'about-page': AboutPage;
+    'services-page': ServicesPage;
     'contact-settings': ContactSetting;
   };
   globalsSelect: {
@@ -111,6 +112,7 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'services-page': ServicesPageSelect<false> | ServicesPageSelect<true>;
     'contact-settings': ContactSettingsSelect<false> | ContactSettingsSelect<true>;
   };
   locale: null;
@@ -1082,6 +1084,7 @@ export interface AboutPage {
   };
   credentials?: {
     heading?: string | null;
+    subtitle?: string | null;
     items?:
       | {
           title: string;
@@ -1096,6 +1099,7 @@ export interface AboutPage {
     missionHeading?: string | null;
     missionContent?: string | null;
     valuesHeading?: string | null;
+    valuesSubtitle?: string | null;
     values?:
       | {
           title: string;
@@ -1109,6 +1113,33 @@ export interface AboutPage {
     metaTitle?: string | null;
     metaDescription?: string | null;
     ogImage?: (number | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services-page".
+ */
+export interface ServicesPage {
+  id: number;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroBadge?: string | null;
+  faqHeading?: string | null;
+  faqSubheading?: string | null;
+  faqItems?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaHeading?: string | null;
+  ctaSubheading?: string | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1430,6 +1461,7 @@ export interface AboutPageSelect<T extends boolean = true> {
     | T
     | {
         heading?: T;
+        subtitle?: T;
         items?:
           | T
           | {
@@ -1446,6 +1478,7 @@ export interface AboutPageSelect<T extends boolean = true> {
         missionHeading?: T;
         missionContent?: T;
         valuesHeading?: T;
+        valuesSubtitle?: T;
         values?:
           | T
           | {
@@ -1461,6 +1494,35 @@ export interface AboutPageSelect<T extends boolean = true> {
         metaTitle?: T;
         metaDescription?: T;
         ogImage?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services-page_select".
+ */
+export interface ServicesPageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroBadge?: T;
+  faqHeading?: T;
+  faqSubheading?: T;
+  faqItems?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  ctaHeading?: T;
+  ctaSubheading?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
       };
   updatedAt?: T;
   createdAt?: T;

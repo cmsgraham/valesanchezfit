@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 import { withPayload } from '@payloadcms/next/withPayload'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const nextConfig = {
   images: {
@@ -8,12 +12,30 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
   },
   async headers() {
     return [
       {
-        source: '/:path*',
+        // Allow Payload admin to render drawers/overlays without X-Frame-Options restriction
+        source: '/admin/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+        ],
+      },
+      {
+        source: '/((?!admin).*)',
         headers: [
           {
             key: 'X-Frame-Options',

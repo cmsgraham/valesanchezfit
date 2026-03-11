@@ -76,6 +76,12 @@ export const AboutPage: GlobalConfig = {
                   defaultValue: 'Credenciales y Certificaciones',
                 },
                 {
+                  name: 'subtitle',
+                  type: 'text',
+                  localized: true,
+                  defaultValue: 'Formación continua para ofrecerte el mejor servicio.',
+                },
+                {
                   name: 'items',
                   type: 'array',
                   fields: [
@@ -127,6 +133,12 @@ export const AboutPage: GlobalConfig = {
                   type: 'text',
                   localized: true,
                   defaultValue: 'Mis Valores',
+                },
+                {
+                  name: 'valuesSubtitle',
+                  type: 'text',
+                  localized: true,
+                  defaultValue: 'Los principios que guían mi trabajo y mi relación con cada cliente.',
                 },
                 {
                   name: 'values',

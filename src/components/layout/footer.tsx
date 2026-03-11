@@ -1,33 +1,99 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Instagram, Facebook, ExternalLink } from 'lucide-react'
 
-const footerLinks = {
-  services: [
-    { label: 'Entrenamiento Personal', href: '/services#personal-training' },
-    { label: 'Planes de Ejercicio', href: '/services#exercise-plans' },
-    { label: 'Clases Virtuales', href: '/services#virtual-classes' },
-    { label: 'App de Seguimiento', href: '/services#app-training' },
-  ],
-  company: [
-    { label: 'Sobre Mí', href: '/about' },
-    { label: 'Servicios', href: '/services' },
-    { label: 'Testimonios', href: '/#testimonials' },
-    { label: 'Contacto', href: '/contact' },
-  ],
-  legal: [
-    { label: 'Política de Privacidad', href: '/privacy-policy' },
-    { label: 'Términos de Servicio', href: '/terms' },
-  ],
-}
-
-const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com/valesanchez.fit', label: 'Instagram' },
-  { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
+const DEFAULT_COLUMNS = [
+  {
+    title: 'Servicios',
+    links: [
+      { label: 'Entrenamiento Personal', href: '/services', newTab: false },
+      { label: 'Coaching Online', href: '/services', newTab: false },
+      { label: 'Clases Grupales', href: '/services', newTab: false },
+      { label: 'Asesoría Nutricional', href: '/services', newTab: false },
+    ],
+  },
+  {
+    title: 'Empresa',
+    links: [
+      { label: 'Sobre Mí', href: '/about', newTab: false },
+      { label: 'Servicios', href: '/services', newTab: false },
+      { label: 'Testimonios', href: '/#testimonials', newTab: false },
+      { label: 'Contacto', href: '/contact', newTab: false },
+    ],
+  },
 ]
 
-export function Footer() {
+const DEFAULT_LEGAL_LINKS = [
+  { label: 'Política de Privacidad', href: '/privacy-policy' },
+  { label: 'Términos de Servicio', href: '/terms' },
+]
+
+const SOCIAL_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  instagram: Instagram,
+  facebook: Facebook,
+}
+
+interface FooterProps {
+  data?: {
+    tagline?: string | null
+    columns?: { title: string; links?: { label: string; link: string; newTab?: boolean | null }[] | null; id?: string | null }[] | null
+    phone?: string | null
+    email?: string | null
+    address?: string | null
+    schedule?: { days: string; hours: string; id?: string | null }[] | null
+    copyrightText?: string | null
+    legalLinks?: { label: string; link: string; id?: string | null }[] | null
+  } | null
+  siteData?: {
+    socialLinks?: { platform: string; url: string; id?: string | null }[] | null
+  } | null
+  contactData?: {
+    whatsapp?: { phoneNumber?: string | null } | null
+    email?: { contactEmail?: string | null } | null
+    location?: { address?: string | null; googleMapsUrl?: string | null } | null
+    businessHours?: { hours?: { days: string; hours: string; id?: string | null }[] | null } | null
+  } | null
+}
+
+export function Footer({ data, siteData, contactData }: FooterProps) {
   const currentYear = new Date().getFullYear()
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '50688546547'
+
+  const columns = data?.columns?.length
+    ? data.columns.map(col => ({
+        title: col.title,
+        links: col.links?.map(l => ({ label: l.label, href: l.link, newTab: l.newTab ?? false })) ?? [],
+      }))
+    : DEFAULT_COLUMNS
+
+  const tagline = data?.tagline ?? 'Transformando vidas a través del fitness personalizado. Tu bienestar es mi prioridad.'
+
+  const footerPhone = data?.phone
+    ?? (contactData?.whatsapp?.phoneNumber ? `+${contactData.whatsapp.phoneNumber}` : '+506 8854 6547')
+  const footerPhoneHref = contactData?.whatsapp?.phoneNumber
+    ? `https://wa.me/${contactData.whatsapp.phoneNumber}`
+    : 'https://wa.me/50688546547'
+
+  const footerEmail = data?.email ?? contactData?.email?.contactEmail ?? 'info@valesanchez.fit'
+  const footerAddress = data?.address ?? contactData?.location?.address ?? 'Costa Rica'
+  const schedule = data?.schedule?.length
+    ? data.schedule
+    : contactData?.businessHours?.hours?.length
+      ? contactData.businessHours.hours
+      : [{ days: 'Lun - Vie', hours: '6:00 - 20:00' }, { days: 'Sáb', hours: '7:00 - 14:00' }]
+
+  const legalLinks = data?.legalLinks?.length
+    ? data.legalLinks.map(l => ({ label: l.label, href: l.link }))
+    : DEFAULT_LEGAL_LINKS
+
+  const socialLinks = siteData?.socialLinks?.length
+    ? siteData.socialLinks
+    : [
+        { platform: 'instagram', url: 'https://instagram.com/valesanchez.fit' },
+        { platform: 'facebook', url: 'https://facebook.com' },
+      ]
+
+  const copyright = data?.copyrightText
+    ? data.copyrightText.replace('{year}', currentYear.toString())
+    : `© ${currentYear} Vale Sánchez Fitness. Todos los derechos reservados.`
 
   return (
     <footer className="bg-warm-900 text-warm-100">
@@ -42,62 +108,49 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-warm-300 text-sm leading-relaxed mb-6">
-              Transformando vidas a través del fitness personalizado.
-              Tu bienestar es mi prioridad.
+              {tagline}
             </p>
             <div className="flex gap-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-warm-800 flex items-center justify-center hover:bg-gold-500 transition-colors"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+              {socialLinks.map((social) => {
+                const IconComponent = SOCIAL_ICON_MAP[social.platform] ?? ExternalLink
+                return (
+                  <a
+                    key={social.platform}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full bg-warm-800 flex items-center justify-center hover:bg-gold-500 transition-colors"
+                    aria-label={social.platform}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                  </a>
+                )
+              })}
             </div>
           </div>
 
-          {/* Services Links */}
-          <div>
-            <h4 className="font-display text-lg font-semibold text-white mb-6">
-              Servicios
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-warm-300 hover:text-gold-400 transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company Links */}
-          <div>
-            <h4 className="font-display text-lg font-semibold text-white mb-6">
-              Empresa
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-warm-300 hover:text-gold-400 transition-colors text-sm"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Dynamic Columns */}
+          {columns.map((col, colIndex) => (
+            <div key={colIndex}>
+              <h4 className="font-display text-lg font-semibold text-white mb-6">
+                {col.title}
+              </h4>
+              <ul className="space-y-3">
+                {col.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <Link
+                      href={link.href}
+                      target={link.newTab ? '_blank' : undefined}
+                      rel={link.newTab ? 'noopener noreferrer' : undefined}
+                      className="text-warm-300 hover:text-gold-400 transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* Contact Info */}
           <div>
@@ -109,12 +162,12 @@ export function Footer() {
                 <Phone className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <a
-                    href={`https://wa.me/${whatsappNumber}`}
+                    href={footerPhoneHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-warm-300 hover:text-gold-400 transition-colors text-sm"
                   >
-                    +{whatsappNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3')}
+                    {footerPhone}
                   </a>
                   <p className="text-warm-400 text-xs mt-1">WhatsApp</p>
                 </div>
@@ -122,23 +175,24 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" />
                 <a
-                  href="mailto:cristian.madrigal@gmail.com"
+                  href={`mailto:${footerEmail}`}
                   className="text-warm-300 hover:text-gold-400 transition-colors text-sm"
                 >
-                  cristian.madrigal@gmail.com
+                  {footerEmail}
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" />
                 <span className="text-warm-300 text-sm">
-                  Costa Rica
+                  {footerAddress}
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <Clock className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" />
                 <div className="text-warm-300 text-sm">
-                  <p>Lun - Vie: 6:00 - 20:00</p>
-                  <p>Sáb: 7:00 - 14:00</p>
+                  {schedule.map((s, i) => (
+                    <p key={i}>{s.days}: {s.hours}</p>
+                  ))}
                 </div>
               </li>
             </ul>
@@ -151,10 +205,10 @@ export function Footer() {
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-warm-400 text-sm">
-              © {currentYear} Vale Sánchez Fitness. Todos los derechos reservados.
+              {copyright}
             </p>
             <div className="flex gap-6">
-              {footerLinks.legal.map((link) => (
+              {legalLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}

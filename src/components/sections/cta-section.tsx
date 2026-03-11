@@ -29,7 +29,7 @@ export function CTASection({
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
+    <section className="relative py-20 md:py-28 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-warm-900/95 to-warm-800/90 z-10" />
@@ -51,7 +51,7 @@ export function CTASection({
 
       <div className="container-custom relative z-20">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-5">
             {heading}
           </h2>
           {subheading && (

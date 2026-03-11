@@ -95,15 +95,15 @@ export function ServicesSection({
   return (
     <section className="section-padding bg-warm-50" id="services">
       <div className="container-custom">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="inline-block px-4 py-1.5 bg-gold-500/10 text-gold-600 rounded-full text-sm font-medium mb-4">
             Servicios
           </span>
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-warm-900 mb-6">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-warm-900 mb-4">
             {heading}
           </h2>
           {subheading && (
-            <p className="text-lg text-warm-600">
+            <p className="text-base md:text-lg text-warm-600">
               {subheading}
             </p>
           )}
@@ -130,13 +130,13 @@ export function ServicesSection({
                     <div className="w-14 h-14 rounded-xl bg-gold-500/10 flex items-center justify-center mb-4 group-hover:bg-gold-500 transition-colors duration-300">
                       <Icon className="w-7 h-7 text-gold-500 group-hover:text-white transition-colors duration-300" />
                     </div>
-                    <CardTitle className="font-display text-xl text-warm-900">
+                    <CardTitle className="font-display text-lg text-warm-900">
                       {service.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     {service.shortDescription && (
-                      <p className="text-warm-600 text-sm mb-4">
+                      <p className="text-warm-600 text-base mb-4">
                         {service.shortDescription}
                       </p>
                     )}
