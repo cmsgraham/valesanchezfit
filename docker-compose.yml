@@ -27,6 +27,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # PAYLOAD_SECRET is required at build time
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET}
     container_name: valesanchez-app
     restart: unless-stopped
     depends_on:

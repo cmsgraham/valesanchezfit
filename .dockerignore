@@ -1,0 +1,36 @@
+# Dependencies — installed inside Docker by pnpm
+node_modules
+
+# Next.js build output — rebuilt inside Docker
+.next
+
+# Git
+.git
+.gitignore
+
+# Local env files (secrets must be passed as env vars / build args)
+.env
+.env.*
+!.env.production.example
+
+# User-uploaded media (mount as a Docker volume instead)
+media
+
+# Dev docker compose
+docker-compose.dev.yml
+
+# OS / editor artefacts
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docs (not needed at runtime)
+docs
+
+# Test / seed scripts are not needed in the image
+# (keep scripts/ because docker-start.sh lives there)

@@ -10,8 +10,8 @@ import type { Service, ServicesPage as ServicesPageType } from '@/payload-types'
 export const revalidate = 60
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayload({ config: configPromise })
-  const page = await payload.findGlobal({ slug: 'services-page' }).catch(() => null) as ServicesPageType | null
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const page = (payload ? await payload.findGlobal({ slug: 'services-page' }).catch(() => null) : null) as ServicesPageType | null
   return {
     title: page?.seo?.metaTitle ?? 'Servicios de Entrenamiento Personal',
     description: page?.seo?.metaDescription ?? 'Descubre nuestros servicios de entrenamiento personal, coaching en línea, planes de nutrición y más.',
@@ -46,17 +46,19 @@ function getPrice(pricing?: Service['pricing']): { price: string; period?: strin
 }
 
 export default async function ServicesPage() {
-  const payload = await getPayload({ config: configPromise })
-  const [servicesResult, contactData, pageData] = await Promise.all([
-    payload.find({
-      collection: 'services',
-      where: { status: { equals: 'published' } },
-      sort: 'order',
-      limit: 20,
-    }).catch(() => ({ docs: [] as Service[] })),
-    payload.findGlobal({ slug: 'contact-settings' }).catch(() => null),
-    payload.findGlobal({ slug: 'services-page' }).catch(() => null) as Promise<ServicesPageType | null>,
-  ])
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const [servicesResult, contactData, pageData] = payload
+    ? await Promise.all([
+        payload.find({
+          collection: 'services',
+          where: { status: { equals: 'published' } },
+          sort: 'order',
+          limit: 20,
+        }).catch(() => ({ docs: [] as Service[] })),
+        payload.findGlobal({ slug: 'contact-settings' }).catch(() => null),
+        payload.findGlobal({ slug: 'services-page' }).catch(() => null) as Promise<ServicesPageType | null>,
+      ])
+    : [{ docs: [] as Service[] }, null, null]
 
   const whatsappNumber = (contactData as any)?.whatsapp?.phoneNumber ?? '50688546547'
 

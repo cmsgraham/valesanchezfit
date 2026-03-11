@@ -20,7 +20,6 @@ export const Media: CollectionConfig = {
   upload: {
     // dirname is src/collections, so ../.. goes to project root
     staticDir: path.resolve(dirname, '../..', 'media'),
-    staticURL: '/media',
     mimeTypes: ['image/*', 'application/pdf'],
     imageSizes: [
       {

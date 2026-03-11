@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 }
 
 export default async function TermsPage() {
-  const payload = await getPayload({ config: configPromise })
-  const settings = await payload.findGlobal({ slug: 'contact-settings' }).catch(() => null) as ContactSetting | null
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const settings = (payload ? await payload.findGlobal({ slug: 'contact-settings' }).catch(() => null) : null) as ContactSetting | null
   const email = settings?.email?.contactEmail ?? 'info@valesanchez.fit'
   const whatsapp = settings?.whatsapp?.phoneNumber ? `+${settings.whatsapp.phoneNumber}` : '+506 8854 6547'
 

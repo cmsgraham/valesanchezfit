@@ -11,8 +11,8 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 export const revalidate = 60
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayload({ config: configPromise })
-  const page = await payload.findGlobal({ slug: 'about-page' }).catch(() => null) as AboutPage | null
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const page = (payload ? await payload.findGlobal({ slug: 'about-page' }).catch(() => null) : null) as AboutPage | null
   return {
     title: page?.seo?.metaTitle ?? 'Sobre Vale Sánchez - Personal Trainer',
     description: page?.seo?.metaDescription ?? 'Conoce a Vale Sánchez, personal trainer certificada dedicada a transformar vidas a través del fitness personalizado.',
@@ -43,8 +43,8 @@ const DEFAULT_VALUES = [
 ]
 
 export default async function AboutPageRoute() {
-  const payload = await getPayload({ config: configPromise })
-  const page = await payload.findGlobal({ slug: 'about-page' }).catch(() => null) as AboutPage | null
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const page = (payload ? await payload.findGlobal({ slug: 'about-page' }).catch(() => null) : null) as AboutPage | null
 
   const heroTitle = page?.heroTitle ?? 'Conoce a Vale Sánchez'
   const heroSubtitle = page?.heroSubtitle ?? 'Conoce mi historia y pasión por el fitness'

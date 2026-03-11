@@ -30,6 +30,10 @@ export const ContactSubmissions: CollectionConfig = {
       type: 'text',
     },
     {
+      name: 'subject',
+      type: 'text',
+    },
+    {
       name: 'service',
       type: 'select',
       options: [

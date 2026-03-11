@@ -12,8 +12,8 @@ import type { Media, Service, Testimonial } from '@/payload-types'
 export const revalidate = 60
 
 export async function generateMetadata(): Promise<Metadata> {
-  const payload = await getPayload({ config: configPromise })
-  const siteSettings = await payload.findGlobal({ slug: 'site-settings' }).catch(() => null)
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const siteSettings = payload ? await payload.findGlobal({ slug: 'site-settings' }).catch(() => null) : null
   const title = (siteSettings as any)?.defaultMetaTitle ?? 'Vale Sánchez Fitness - Personal Trainer'
   const description = (siteSettings as any)?.defaultMetaDescription ?? 'Promoviendo estilos de vida saludables a través del Fitness. Entrenamiento personalizado y programas diseñados especialmente para ti.'
   return {
@@ -28,20 +28,22 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const payload = await getPayload({ config: configPromise })
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
 
-  const [homePage, servicesResult, testimonialsResult] = await Promise.all([
-    payload.findGlobal({ slug: 'home-page' }).catch(() => null),
-    payload.find({ collection: 'services', where: { status: { equals: 'published' } }, sort: 'order', limit: 6 }).catch(() => ({ docs: [] })),
-    payload.find({ collection: 'testimonials', where: { status: { equals: 'published' } }, limit: 6 }).catch(() => ({ docs: [] })),
-  ])
+  const [homePage, servicesResult, testimonialsResult] = payload
+    ? await Promise.all([
+        payload.findGlobal({ slug: 'home-page' }).catch(() => null),
+        payload.find({ collection: 'services', where: { status: { equals: 'published' } }, sort: 'order', limit: 6 }).catch(() => ({ docs: [] })),
+        payload.find({ collection: 'testimonials', where: { status: { equals: 'published' } }, limit: 6 }).catch(() => ({ docs: [] })),
+      ])
+    : [null, { docs: [] }, { docs: [] }]
 
   const hero = homePage
   const vp = homePage?.valueProposition
   const ap = homePage?.aboutPreview
   const ss = homePage?.servicesSection
   const ts = homePage?.testimonialsSection
-  const cta = homePage?.ctaSection
+  const cta = homePage?.contactCta
 
   // Hero image URL
   const heroImageUrl = hero?.heroImage && typeof hero.heroImage === 'object'

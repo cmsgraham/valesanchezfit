@@ -78,7 +78,6 @@ export async function POST(request: NextRequest) {
         metadata: {
           ipAddress: ip,
           userAgent: request.headers.get('user-agent') || undefined,
-          source: 'contact-form',
         },
       },
     })

@@ -24,13 +24,15 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode
 }) {
-  const payload = await getPayload({ config: configPromise })
-  const [headerData, footerData, contactData, siteData] = await Promise.all([
-    payload.findGlobal({ slug: 'header' }).catch(() => null),
-    payload.findGlobal({ slug: 'footer' }).catch(() => null),
-    payload.findGlobal({ slug: 'contact-settings' }).catch(() => null),
-    payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
-  ])
+  const payload = await getPayload({ config: configPromise }).catch(() => null)
+  const [headerData, footerData, contactData, siteData] = payload
+    ? await Promise.all([
+        payload.findGlobal({ slug: 'header' }).catch(() => null),
+        payload.findGlobal({ slug: 'footer' }).catch(() => null),
+        payload.findGlobal({ slug: 'contact-settings' }).catch(() => null),
+        payload.findGlobal({ slug: 'site-settings' }).catch(() => null),
+      ])
+    : [null, null, null, null]
 
   const whatsappNumber = (contactData as any)?.whatsapp?.phoneNumber ?? '50688546547'
   const whatsappMessage = (contactData as any)?.whatsapp?.defaultMessage ?? 'Hola! Me interesa saber más sobre los servicios de entrenamiento personal.'
